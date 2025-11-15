@@ -1,10 +1,9 @@
 'use client';
-import { EditMe,  updateMe } from "@/lib/api/clientApi";
+import { EditMe, updateMe } from "@/lib/api/clientApi";
 import css from "./EditProfilePage.module.css";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ApiError } from "@/app/api/api";
 import Image from "next/image";
 
 export default function EditProfilePage() {
@@ -15,24 +14,37 @@ export default function EditProfilePage() {
   const handleSubmit = async (formData: FormData) => {
     try {
       const formValues: EditMe = {
-        username: formData.get('username') as string,
+        username: formData.get("username") as string,
       };
 
-      const res = await updateMe(formValues);
-      if (res) {
-        setUser(res);
+      const updatedUser = await updateMe(formValues);
+
+      if (updatedUser) {
+        setUser(updatedUser);
         router.push("/profile");
-      } else {
-        setError("Something went wrong");
+        return;
       }
-    } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.error ??
-          (error as ApiError).message ??
-          "Oops... some error"
-      );
+
+      setError("Something went wrong");
+    } catch (err: unknown) {
+      
+      if (typeof err === "object" && err !== null) {
+        
+        const axiosError = err as any;
+
+        const message =
+          axiosError?.response?.data?.error ??
+          axiosError?.response?.data?.message ??
+          axiosError?.message ??
+          "Oops... some error";
+
+        setError(message);
+      } else {
+        setError("Unknown error occurred");
+      }
     }
   };
+
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -60,6 +72,7 @@ export default function EditProfilePage() {
 
           <p>Email: {user?.email}</p>
           <p className={css.error}>{error}</p>
+
           <div className={css.actions}>
             <button type="submit" className={css.saveButton}>
               Save

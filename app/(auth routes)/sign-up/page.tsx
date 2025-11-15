@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
-
+import css from './SignUpPage.module.css'
 export default function SignUp() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
@@ -28,7 +28,7 @@ export default function SignUp() {
   };
 
   return (
-    <main>
+    <main className={css.form}>
       <h1>Register page</h1>
 
       <form
@@ -38,6 +38,7 @@ export default function SignUp() {
         <div style={{ display: "grid", gap: 8 }}>
           <label htmlFor="email">Email</label>
           <input
+           className={css.input}
             type="email"
             id="email"
             required
@@ -49,6 +50,7 @@ export default function SignUp() {
         <div style={{ display: "grid", gap: 8 }}>
           <label htmlFor="password">Password</label>
           <input
+          className={css.input}
             type="password"
             id="password"
             required
@@ -58,7 +60,7 @@ export default function SignUp() {
         </div>
 
         <div>
-          <button type="submit">Register</button>
+          <button className={css.submitButton} type="submit">Register</button>
         </div>
 
         {error && <p style={{ color: "red" }}>{error}</p>}

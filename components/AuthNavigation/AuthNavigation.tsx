@@ -30,7 +30,7 @@ export default function AuthNavigation() {
       <>
         <li className={css.navigationItem}>
           <Link href="/sign-in" prefetch={false} className={css.navigationLink}>
-            Log In
+            Log in
           </Link>
         </li>
 

@@ -1,4 +1,4 @@
-import { fetchNoteById, fetchNotes } from "@/lib/api";
+
 import {
   dehydrate,
   HydrationBoundary,
@@ -7,6 +7,7 @@ import {
 import FilterPageClient from "./Notes.client";
 import { NoteTag } from "@/types/note";
 import { Metadata } from "next";
+import { fetchNotes } from "@/lib/api/serverApi";
 
 interface FilterPageProps {
   params: Promise<{ slug: string[] }>;
@@ -58,7 +59,7 @@ const { slug } = await params;
       page: 1,
       search: '',
       perPage: 12,
-      tag: category,
+      tag: category ?? "",
     }),
   });
 

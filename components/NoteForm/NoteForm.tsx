@@ -2,15 +2,26 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import css from './NoteForm.module.css';
-import { createNote, NewNoteData, TAGS, type Tags } from "@/lib/api";
+
 import { useRouter } from "next/navigation";
 import { NoteTag } from "@/types/note";
 import { useNoteDraftStore } from "@/lib/store/noteStore";
+import { createNote } from '@/lib/api/clientApi';
+import { TAGS } from '@/app/(private routes)/notes/filter/@sidebar/default';
 
 
 interface NoteFormProps {
   categories: NoteTag[];
 }
+
+export type Tags = {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 
 export default function NoteForm({ categories }: NoteFormProps) {
   const router = useRouter();
@@ -108,6 +119,8 @@ export default function NoteForm({ categories }: NoteFormProps) {
         </button>
       </div>
     </form>
+);
+}
 
 
     // <form className={css.form} action={handleSubmit}>
@@ -152,9 +165,7 @@ export default function NoteForm({ categories }: NoteFormProps) {
     //     </button>
     //   </div>
     // </form>
-  );
-}
-
+  
 // interface NoteFormProps {
 //   categories: Tags[];
 // }

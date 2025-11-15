@@ -2,7 +2,8 @@
 import { Metadata } from "next";
 import css from './CreateNote.module.css';
 import NoteForm from "@/components/NoteForm/NoteForm";
-import { TAGS } from "@/lib/api";
+import { TAGS } from "../../filter/@sidebar/default";
+
 
 
 export const metadata: Metadata = {

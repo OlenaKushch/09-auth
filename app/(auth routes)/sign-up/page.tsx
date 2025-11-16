@@ -6,7 +6,7 @@ import { Credentials, login, register } from '@/lib/api/clientApi';
 import { useAuthStore } from "@/lib/store/authStore";
 import css from './SignUpPage.module.css';
 
-export default function SignIn() {
+export default function SignUp() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const setUser = useAuthStore((state) => state.setUser);
@@ -28,7 +28,7 @@ export default function SignIn() {
 
     return (
         <main className={css.mainContent}>
-            <h1 className={css.formTitle}>Sign in</h1>
+            <h1 className={css.formTitle}>Registration</h1>
 
             <form className={css.form} action={handleSubmit}>
                 <div className={css.formGroup}>
@@ -55,7 +55,7 @@ export default function SignIn() {
 
                 <div className={css.actions}>
                     <button type='submit' className={css.submitButton}>
-                        Log in
+                       Sign up
                     </button>
                 </div>
 

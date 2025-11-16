@@ -2,28 +2,30 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/lib/api/clientApi';
+import { Credentials, login } from '@/lib/api/clientApi';
 import { useAuthStore } from "@/lib/store/authStore";
 import css from './SignInPage.module.css';
 
 export default function SignIn() {
     const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
     const setUser = useAuthStore((state) => state.setUser);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
 
-    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError(null);
 
+    const handleSubmit = async (formData: FormData) => {
         try {
-            const user = await login({ email, password });
-
-            setUser(user);
-            router.push('/profile');
+            const userData = Object.fromEntries(
+                formData
+            ) as unknown as Credentials;
+            const user = await login(userData);
+            if (user) {
+                setUser(user);
+                router.push('/profile');
+            }
         } catch {
             setError('Ooops, some error');
         }
@@ -33,7 +35,7 @@ export default function SignIn() {
         <main className={css.mainContent}>
             <h1 className={css.formTitle}>Sign in</h1>
 
-            <form className={css.form} onSubmit={handleSubmit}>
+            <form className={css.form} action={handleSubmit}>
                 <div className={css.formGroup}>
                     <label htmlFor='email'>Email</label>
                     <input
@@ -42,8 +44,6 @@ export default function SignIn() {
                         name='email'
                         className={css.input}
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 
@@ -55,8 +55,6 @@ export default function SignIn() {
                         name='password'
                         className={css.input}
                         required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
 

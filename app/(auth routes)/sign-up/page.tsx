@@ -1,73 +1,66 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { register } from "@/lib/api/clientApi";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Credentials, login, register } from '@/lib/api/clientApi';
 import { useAuthStore } from "@/lib/store/authStore";
-import css from './SignUpPage.module.css';
+import css from './SignInPage.module.css';
 
+export default function SignIn() {
+    const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+    const setUser = useAuthStore((state) => state.setUser);
 
+    const handleSubmit = async (formData: FormData) => {
+        try {
+            const userData = Object.fromEntries(
+                formData
+            ) as unknown as Credentials;
+            const user = await register(userData);
+            if (user) {
+                setUser(user);
+                router.push('/profile');
+            }
+        } catch {
+            setError('Ooops, some error');
+        }
+    };
 
-export default function SignUp() {
-  const router = useRouter();
-  const setUser = useAuthStore((state) => state.setUser);
+    return (
+        <main className={css.mainContent}>
+            <h1 className={css.formTitle}>Sign in</h1>
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+            <form className={css.form} action={handleSubmit}>
+                <div className={css.formGroup}>
+                    <label htmlFor='email'>Email</label>
+                    <input
+                        id='email'
+                        type='email'
+                        name='email'
+                        className={css.input}
+                        required
+                    />
+                </div>
 
-  const [error, setError] = useState<string | null>(null);
+                <div className={css.formGroup}>
+                    <label htmlFor='password'>Password</label>
+                    <input
+                        id='password'
+                        type='password'
+                        name='password'
+                        className={css.input}
+                        required
+                    />
+                </div>
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+                <div className={css.actions}>
+                    <button type='submit' className={css.submitButton}>
+                        Log in
+                    </button>
+                </div>
 
-    try {
-      const user = await register({ email, password });
-      setUser(user);
-      router.push("/profile");
-    } catch {
-      setError("Ooops, some error");
-    }
-  };
-
-  return (
-    <main className={css.form}>
-      <h1>Register page</h1>
-
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "grid", gap: 12, maxWidth: 300 }}
-      >
-        <div style={{ display: "grid", gap: 8 }}>
-          <label htmlFor="email">Email</label>
-          <input
-           className={css.input}
-            type="email"
-            id="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div style={{ display: "grid", gap: 8 }}>
-          <label htmlFor="password">Password</label>
-          <input
-          className={css.input}
-            type="password"
-            id="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <button className={css.submitButton} type="submit">Register</button>
-        </div>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
-    </main>
-  );
+                {error && <p className={css.error}>{error}</p>}
+            </form>
+        </main>
+    );
 }

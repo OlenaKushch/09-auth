@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Credentials, login, register } from '@/lib/api/clientApi';
 import { useAuthStore } from "@/lib/store/authStore";
-import css from './SignInPage.module.css';
+import css from './SignUpPage.module.css';
 
 export default function SignIn() {
     const router = useRouter();

@@ -6,11 +6,8 @@ export interface NotesHttpResponse {
   totalPages: number;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const baseURL= `${API_URL}/api`;
-
 export const nextServer = axios.create({
-  baseURL: baseURL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL + "/api",
   withCredentials: true,
 });
 

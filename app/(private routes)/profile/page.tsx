@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import css from './ProfilePage.module.css';
 
 import { getMe } from "@/lib/api/serverApi";
+import Link from "next/link";
+import Image from "next/image";
 
 
 export const metadata: Metadata ={
@@ -39,15 +41,15 @@ export default async function ProfilePage() {
           <h1 className={css.formTitle}>Profile Page</h1>
 
           
-          <a href="/profile/edit" className={css.editProfileButton}>
+          <Link href="/profile/edit" className={css.editProfileButton}>
             Edit Profile
-          </a>
+          </Link>
         </div>
 
         <div className={css.avatarWrapper}>
-          <img
-            src={profile?.avatar ?? "/placeholder.png"}
-            alt={profile?.username ?? "User Avatar"}
+          <Image
+            src={profile?.avatar || "/placeholder.png"}
+            alt={profile?.username || "User Avatar"}
             width={120}
             height={120}
             className={css.avatar}
@@ -55,8 +57,8 @@ export default async function ProfilePage() {
         </div>
 
         <div className={css.profileInfo}>
-          <p>Username: your_username</p>
-          <p>Email: your_email@example.com</p>
+          <p>Username: {profile.username}</p>
+          <p>Email: {profile.email}</p>
         </div>
       </div>
     </main>
